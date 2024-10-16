@@ -1,0 +1,16 @@
+# Proxies for required interfaces
+DifferentialRobotProxy = differentialrobot:tcp -h localhost -p 10004
+EmotionalMotorProxy = emotionalmotor:tcp -h localhost -p 16446
+LEDArrayProxy = ledarray:tcp -h localhost -p 13982
+
+
+
+
+
+Ice.Warn.Connections=0
+Ice.Trace.Network=0
+Ice.Trace.Protocol=0
+Ice.MessageSizeMax=20004800
+
+
+
