@@ -42,6 +42,7 @@ class GenericWorker(QtCore.QObject):
         super(GenericWorker, self).__init__()
 
         self.differentialrobot_proxy = mprx["DifferentialRobotProxy"]
+        self.emergencystop_proxy = mprx["EmergencyStopProxy"]
         self.emotionalmotor_proxy = mprx["EmotionalMotorProxy"]
         self.ledarray_proxy = mprx["LEDArrayProxy"]
 
