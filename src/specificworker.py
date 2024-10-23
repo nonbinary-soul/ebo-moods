@@ -61,7 +61,7 @@ class SpecificWorker(GenericWorker):
     @QtCore.Slot()
     def compute(self):
         print('SpecificWorker.compute...')
-        self.joyMood()
+        self.sadnessMood()
         time.sleep(2)
         return True
 
@@ -73,42 +73,63 @@ class SpecificWorker(GenericWorker):
         QTimer.singleShot(200, QApplication.instance().quit)
 
     #########################################
-    def turn_full(self):
-        limit = time.time() + 2
+
+    def turn(self, duration: float, angular_speed: float):
+        limit = time.time() + duration
         while time.time() <= limit:
-            self.differentialrobot_proxy.setSpeedBase(0,90)  
+            self.differentialrobot_proxy.setSpeedBase(0, angular_speed)
         self.differentialrobot_proxy.stopBase()
 
-    def turn_left(self, angle_radians=0.5, angular_speed=0.5):
-        time_for_turn = angle_radians / angular_speed
-        self.differentialrobot_proxy.setSpeedBase(0, angular_speed)
-        time.sleep(time_for_turn)
+    def turn_full(self):
+        self.turn(2, 90)
+    def turn_left(self):
+        self.turn(0.5, 90)
+    def turn_right(self):
+        self.turn(0.5, -90)
+
+    def moving_side_to_side(self, times_limit: int): 
+        self.turn_left()
+        self.turn_right()
+        self.turn_right()
+
+        times = 1
+        while times <= times_limit: 
+            self.turn_left()
+            self.turn_left()
+            self.turn_right()
+            self.turn_right()
+            times+=1
+
+        self.turn_left()
+    
+    def moving_backwards_slowly(self): 
+        limit = time.time() + 1.5
+        while time.time() <= limit:
+            self.differentialrobot_proxy.setSpeedBase(-5,0)  
+
         self.differentialrobot_proxy.stopBase()
 
-    def turn_right(self, angle_radians=0.5, angular_speed=0.5):
-        time_for_turn = angle_radians / angular_speed
-        self.differentialrobot_proxy.setSpeedBase(0, -angular_speed)     
-        time.sleep(time_for_turn*4)
-        self.differentialrobot_proxy.stopBase()
-        
+    def turn_back_slowly(self): 
+        self.turn(1, 5)
+        self.turn(1, 5)
+
     #########################################
 
     
     def joyMood(self): 
         self.emotionalmotor_proxy.expressJoy()
-        self.differentialrobot_proxy.setSpeedBase(1000, 0)
+        self.differentialrobot_proxy.setSpeedBase(5000, 0)
         time.sleep(0.5)
-        self.differentialrobot_proxy.setSpeedBase(-1000, 0)
+        self.differentialrobot_proxy.setSpeedBase(-5000, 0)
         time.sleep(0.5)
-        self.turn_full()
-        self.differentialrobot_proxy.stopBase()
+        self.moving_side_to_side(1)
         
     def sadnessMood(self): 
         self.emotionalmotor_proxy.expressSadness()
-        time.sleep(1)
-        self.differentialrobot_proxy.setSpeedBase(-5, 0)
         time.sleep(0.5)
-        self.differentialrobot_proxy.stopBase()
+        self.moving_backwards_slowly()
+        time.sleep(0.5)
+        self.turn_back_slowly()
 
     # def dance(self): 
     #     self.emotionalmotor_proxy.expressJoy()
