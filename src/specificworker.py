@@ -61,17 +61,17 @@ class SpecificWorker(GenericWorker):
     @QtCore.Slot()
     def compute(self):
         print('SpecificWorker.compute...')
-        self.joyMood()
+        self.expressJoy()
         time.sleep(2)
-        self.sadnessMood()
+        self.expressSadness()
         time.sleep(2)
-        self.fearMood()
+        self.expressFear()
         time.sleep(2)
-        self.supriseMood()
+        self.expressSurprise()
         time.sleep(2)
-        self.angerMood()
+        self.expressAnger()
         time.sleep(2)
-        self.disgustMood()
+        self.expressDisgust()
         time.sleep(2)
         return True
 
@@ -130,7 +130,7 @@ class SpecificWorker(GenericWorker):
 
     #########################################
 
-    def joyMood(self): 
+    def expressJoy(self): 
         self.emotionalmotor_proxy.expressJoy()
         pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(green=170, red=0, blue=85, white=0) for i in range(self.NUM_LEDS)}
         self.ledarray_proxy.setLEDArray(pixel_array)
@@ -141,7 +141,7 @@ class SpecificWorker(GenericWorker):
         time.sleep(0.5)
         self.moving_side_to_side(1)
         
-    def sadnessMood(self): 
+    def expressSadness(self): 
         self.emotionalmotor_proxy.expressSadness()
         pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(red=0, green=85, blue=153, white=0) for i in range(self.NUM_LEDS)}
         self.ledarray_proxy.setLEDArray(pixel_array)
@@ -151,14 +151,14 @@ class SpecificWorker(GenericWorker):
         time.sleep(0.5)
         self.turn_back_slowly()
 
-    def fearMood(self): 
+    def expressFear(self): 
         self.emotionalmotor_proxy.expressFear()
         pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(red=50, green=0, blue=80, white=0) for i in range(self.NUM_LEDS)}
         self.ledarray_proxy.setLEDArray(pixel_array)
         time.sleep(0.5)
         self.jolts(0.1, -100)
 
-    def supriseMood(self): 
+    def expressSurprise(self): 
         self.emotionalmotor_proxy.expressSurprise()
         pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(red=255, green=255, blue=102, white=0) for i in range(self.NUM_LEDS)}
         self.ledarray_proxy.setLEDArray(pixel_array)
@@ -168,13 +168,13 @@ class SpecificWorker(GenericWorker):
         
         self.turn_full()
     
-    def angerMood(self): 
+    def expressAnger(self): 
         self.emotionalmotor_proxy.expressAnger()
         pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(red=128, green=0, blue=0, white=0) for i in range(self.NUM_LEDS)}
         self.ledarray_proxy.setLEDArray(pixel_array)
         self.jolts(0.1, 100)
 
-    def disgustMood(self): 
+    def expressDisgust(self): 
         self.emotionalmotor_proxy.expressDisgust()
         pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(red=50, green=30, blue=10, white=0) for i in range(self.NUM_LEDS)}
         self.ledarray_proxy.setLEDArray(pixel_array)
