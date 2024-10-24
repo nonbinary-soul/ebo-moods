@@ -29,7 +29,6 @@ import time
 sys.path.append('/opt/robocomp/lib')
 console = Console(highlight=False)
 
-
 # If RoboComp was compiled with Python bindings you can use InnerModel in Python
 # import librobocomp_qmat
 # import librobocomp_osgviewer
@@ -40,6 +39,7 @@ class SpecificWorker(GenericWorker):
     def __init__(self, proxy_map, startup_check=False):
         super(SpecificWorker, self).__init__(proxy_map)
         self.Period = 2000
+        self.NUM_LEDS = 52
         if startup_check:
             self.startup_check()
         else:
@@ -61,7 +61,17 @@ class SpecificWorker(GenericWorker):
     @QtCore.Slot()
     def compute(self):
         print('SpecificWorker.compute...')
+        self.joyMood()
+        time.sleep(2)
+        self.sadnessMood()
+        time.sleep(2)
         self.fearMood()
+        time.sleep(2)
+        self.supriseMood()
+        time.sleep(2)
+        self.angerMood()
+        time.sleep(2)
+        self.disgustMood()
         time.sleep(2)
         return True
 
@@ -102,18 +112,17 @@ class SpecificWorker(GenericWorker):
 
         self.turn_left()
     
-    def moving_backwards(self, duration, speed): 
+    def moving_straight(self, duration: float, speed: int): 
         limit = time.time() + duration
         while time.time() <= limit:
-            self.differentialrobot_proxy.setSpeedBase(-speed, 0)
+            self.differentialrobot_proxy.setSpeedBase(speed, 0)
         self.differentialrobot_proxy.stopBase()
 
-    def jolts_backwards(self): 
-        self.moving_backwards(0.1, 100)
+    def jolts(self, duration: float, speed: int): 
+        self.moving_straight(duration, speed)
         time.sleep(0.5)
-        self.moving_backwards(0.1, 100)
+        self.moving_straight(duration, speed)
         time.sleep(0.5)
-        
 
     def turn_back_slowly(self): 
         self.turn(1, 5)
@@ -123,8 +132,8 @@ class SpecificWorker(GenericWorker):
 
     def joyMood(self): 
         self.emotionalmotor_proxy.expressJoy()
-        pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(red=0, green=255, blue=0, white=0) for i in range(54)}
-        result = self.ledarray_proxy.setLEDArray(pixel_array)
+        pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(green=170, red=0, blue=85, white=0) for i in range(self.NUM_LEDS)}
+        self.ledarray_proxy.setLEDArray(pixel_array)
 
         self.differentialrobot_proxy.setSpeedBase(5000, 0)
         time.sleep(0.5)
@@ -134,19 +143,52 @@ class SpecificWorker(GenericWorker):
         
     def sadnessMood(self): 
         self.emotionalmotor_proxy.expressSadness()
-        pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(red=0, green=85, blue=153, white=0) for i in range(54)}
-        result = self.ledarray_proxy.setLEDArray(pixel_array)
+        pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(red=0, green=85, blue=153, white=0) for i in range(self.NUM_LEDS)}
+        self.ledarray_proxy.setLEDArray(pixel_array)
 
         time.sleep(0.5)
-        self.moving_backwards(1.5, 5) # moving slowly
+        self.moving_straight(1.5, -5) # moving slowly
         time.sleep(0.5)
         self.turn_back_slowly()
 
     def fearMood(self): 
         self.emotionalmotor_proxy.expressFear()
-        pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(red=50, green=0, blue=100, white=0) for i in range(54)}
-        result = self.ledarray_proxy.setLEDArray(pixel_array)
-        self.jolts_backwards()
+        pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(red=50, green=0, blue=80, white=0) for i in range(self.NUM_LEDS)}
+        self.ledarray_proxy.setLEDArray(pixel_array)
+        time.sleep(0.5)
+        self.jolts(0.1, -100)
+
+    def supriseMood(self): 
+        self.emotionalmotor_proxy.expressSurprise()
+        pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(red=255, green=255, blue=102, white=0) for i in range(self.NUM_LEDS)}
+        self.ledarray_proxy.setLEDArray(pixel_array)
+
+        self.differentialrobot_proxy.setSpeedBase(-5000, 0) # go back quickly
+        time.sleep(0.5)
+        
+        self.turn_full()
+    
+    def angerMood(self): 
+        self.emotionalmotor_proxy.expressAnger()
+        pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(red=128, green=0, blue=0, white=0) for i in range(self.NUM_LEDS)}
+        self.ledarray_proxy.setLEDArray(pixel_array)
+        self.jolts(0.1, 100)
+
+    def disgustMood(self): 
+        self.emotionalmotor_proxy.expressDisgust()
+        pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(red=50, green=30, blue=10, white=0) for i in range(self.NUM_LEDS)}
+        self.ledarray_proxy.setLEDArray(pixel_array)
+        
+        self.moving_straight(0.5, -1000) # go back
+        time.sleep(0.5)
+
+        # simulating saying "no"
+        self.turn_left()
+        self.turn_right()
+        self.turn_right()
+        self.turn_left()
+
+        
 
     ######################
     # From the RoboCompDifferentialRobot you can call this methods:
