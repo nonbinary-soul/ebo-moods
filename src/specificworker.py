@@ -150,6 +150,8 @@ class SpecificWorker(GenericWorker):
         self.moving_straight(1.5, -5) # moving slowly
         time.sleep(0.5)
         self.turn_back_slowly()
+        time.sleep(1)
+        self.turn_back_slowly()
 
     def expressFear(self): 
         self.emotionalmotor_proxy.expressFear()
