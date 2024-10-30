@@ -63,10 +63,10 @@ class SpecificWorker(GenericWorker):
     @QtCore.Slot()
     def compute(self):
         print('SpecificWorker.compute...')
-        self.expressJoy()
-        time.sleep(2)
-        # self.expressSadness()
+        # self.expressJoy()
         # time.sleep(2)
+        self.expressSadness()
+        time.sleep(2)
         # self.expressFear()
         # time.sleep(2)
         # self.expressSurprise()
@@ -85,14 +85,7 @@ class SpecificWorker(GenericWorker):
         QTimer.singleShot(200, QApplication.instance().quit)
 
     #########################################
-
-    def turn(self, duration: float, angular_speed: float):
-        self.differentialrobot_proxy.setSpeedBase(0, angular_speed)
-        time.sleep(duration)
-        self.differentialrobot_proxy.stopBase()
-
-
-    # odometría, código propuesto
+        # odometría, código propuesto
     # def turn_full(self):
     #     initial_state = self.differentialrobot_proxy.getBaseState()  # Obtener el estado inicial
     #     initial_angle = initial_state.alpha  # Ángulo inicial de la base
@@ -114,17 +107,20 @@ class SpecificWorker(GenericWorker):
     #     self.differentialrobot_proxy.stopBase()
     
     # quarter self.turn(2/5, math.pi/5)
+
+    def turn(self, duration: float, angular_speed: float):
+        self.differentialrobot_proxy.setSpeedBase(0, angular_speed)
+        time.sleep(duration)
+        self.differentialrobot_proxy.stopBase()
+
     def turn_full(self):
         self.turn(2.05, math.pi/9)
-        time.sleep(1)
 
     def turn_right(self):
         self.turn(2.05/3, math.pi/9)
-        time.sleep(1)
 
     def turn_left(self):
         self.turn(2.05/3, -(math.pi/9))
-        time.sleep(1)
 
     def moving_side_to_side(self, times_limit: int): 
         times = 1
@@ -136,9 +132,8 @@ class SpecificWorker(GenericWorker):
             times+=1
     
     def moving_straight(self, duration: float, speed: int): 
-        limit = time.time() + duration
-        while time.time() <= limit:
-            self.differentialrobot_proxy.setSpeedBase(speed, 0)
+        self.differentialrobot_proxy.setSpeedBase(speed, 0)
+        time.sleep(duration)
         self.differentialrobot_proxy.stopBase()
 
     def jolts(self, duration: float, speed: int): 
@@ -148,8 +143,7 @@ class SpecificWorker(GenericWorker):
         time.sleep(0.5)
 
     def turn_back_slowly(self): 
-        self.turn(1, 5)
-        self.turn(1, 5)
+        self.turn(5.10/3, math.pi/11)
 
     #########################################
 
@@ -158,22 +152,24 @@ class SpecificWorker(GenericWorker):
         pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(green=170, red=0, blue=85, white=0) for i in range(self.NUM_LEDS)}
         self.ledarray_proxy.setLEDArray(pixel_array)
 
-        # self.differentialrobot_proxy.setSpeedBase(200, 0)
-        # time.sleep(0.5)
-        # self.differentialrobot_proxy.setSpeedBase(-200, 0)
-        # time.sleep(0.5)
+        self.moving_straight(2, 35)
+        self.moving_straight(2, -35)
         self.moving_side_to_side(1)
         
     def expressSadness(self): 
+        self.emotionalmotor_proxy.expressJoy()
+        pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(green=170, red=0, blue=85, white=0) for i in range(self.NUM_LEDS)}
+        self.ledarray_proxy.setLEDArray(pixel_array)
+
+        time.sleep(1)
+
         self.emotionalmotor_proxy.expressSadness()
         pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(red=0, green=85, blue=153, white=0) for i in range(self.NUM_LEDS)}
         self.ledarray_proxy.setLEDArray(pixel_array)
 
-        time.sleep(0.5)
-        self.moving_straight(1.5, -5) # moving slowly
-        time.sleep(0.5)
+        self.moving_straight(2, -25) # moving back slowly
         self.turn_back_slowly()
-        time.sleep(1)
+        time.sleep(2)
         self.turn_back_slowly()
 
     def expressFear(self): 
