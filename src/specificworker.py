@@ -108,6 +108,10 @@ class SpecificWorker(GenericWorker):
     
     # quarter self.turn(2/5, math.pi/5)
 
+    def set_all_LEDS_colors(self, red=0, green=0, blue=0, white=0): 
+        pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(red=red, green=green, blue=blue, white=white) for i in range(self.NUM_LEDS)}
+        self.ledarray_proxy.setLEDArray(pixel_array)
+
     def turn(self, duration: float, angular_speed: float):
         self.differentialrobot_proxy.setSpeedBase(0, angular_speed)
         time.sleep(duration)
@@ -149,23 +153,15 @@ class SpecificWorker(GenericWorker):
 
     def expressJoy(self): 
         self.emotionalmotor_proxy.expressJoy()
-        pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(green=170, red=0, blue=85, white=0) for i in range(self.NUM_LEDS)}
-        self.ledarray_proxy.setLEDArray(pixel_array)
+        self.set_all_LEDS_colors(red=0, green=170, blue=85, white=0) # light green
 
         self.moving_straight(2, 35)
         self.moving_straight(2, -35)
         self.moving_side_to_side(1)
         
     def expressSadness(self): 
-        self.emotionalmotor_proxy.expressJoy()
-        pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(green=170, red=0, blue=85, white=0) for i in range(self.NUM_LEDS)}
-        self.ledarray_proxy.setLEDArray(pixel_array)
-
-        time.sleep(1)
-
         self.emotionalmotor_proxy.expressSadness()
-        pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(red=0, green=85, blue=153, white=0) for i in range(self.NUM_LEDS)}
-        self.ledarray_proxy.setLEDArray(pixel_array)
+        self.set_all_LEDS_colors(red=0, green=85, blue=153, white=0) # light blue
 
         self.moving_straight(2, -25) # moving back slowly
         self.turn_back_slowly()
@@ -174,15 +170,14 @@ class SpecificWorker(GenericWorker):
 
     def expressFear(self): 
         self.emotionalmotor_proxy.expressFear()
-        pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(red=50, green=0, blue=80, white=0) for i in range(self.NUM_LEDS)}
-        self.ledarray_proxy.setLEDArray(pixel_array)
+        self.set_all_LEDS_colors(red=50, green=0, blue=80, white=0) # light purple
+        
         time.sleep(0.5)
         self.jolts(0.1, -100)
 
     def expressSurprise(self): 
-        self.emotionalmotor_proxy.expressSurprise()
-        pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(red=255, green=255, blue=102, white=0) for i in range(self.NUM_LEDS)}
-        self.ledarray_proxy.setLEDArray(pixel_array)
+        self.emotionalmotor_proxy.expressSurprise() # light yellow
+        self.set_all_LEDS_colors(red=255, green=255, blue=102, white=0)
 
         self.differentialrobot_proxy.setSpeedBase(-100, 0) # go back quickly
         time.sleep(0.5)
@@ -191,14 +186,12 @@ class SpecificWorker(GenericWorker):
     
     def expressAnger(self): 
         self.emotionalmotor_proxy.expressAnger()
-        pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(red=128, green=0, blue=0, white=0) for i in range(self.NUM_LEDS)}
-        self.ledarray_proxy.setLEDArray(pixel_array)
+        self.set_all_LEDS_colors(red=128, green=0, blue=0, white=0) # light red 
         self.jolts(0.1, 100)
 
     def expressDisgust(self): 
         self.emotionalmotor_proxy.expressDisgust()
-        pixel_array = {i: ifaces.RoboCompLEDArray.Pixel(red=50, green=30, blue=10, white=0) for i in range(self.NUM_LEDS)}
-        self.ledarray_proxy.setLEDArray(pixel_array)
+        self.set_all_LEDS_colors(red=50, green=30, blue=10, white=0) # dark green
         
         self.moving_straight(0.5, -1000) # go back
         time.sleep(0.5)
