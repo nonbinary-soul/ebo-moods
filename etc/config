@@ -1,8 +1,8 @@
 # Proxies for required interfaces
-DifferentialRobotProxy = differentialrobot:tcp -h localhost -p 10004
-EmergencyStopProxy = emergencystop:tcp -h localhost -p 12143
-EmotionalMotorProxy = emotionalmotor:tcp -h localhost -p 30001
-LEDArrayProxy = ledarray:tcp -h localhost -p 10006
+DifferentialRobotProxy = differentialrobot:tcp -h 192.168.3.46 -p 10004
+EmergencyStopProxy = emergencystop:tcp -h 192.168.3.46 -p 12143
+EmotionalMotorProxy = emotionalmotor:tcp -h 192.168.3.46 -p 10945
+LEDArrayProxy = ledarray:tcp -h 192.168.3.46 -p 10991
 
 
 
