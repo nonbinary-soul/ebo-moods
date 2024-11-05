@@ -130,9 +130,13 @@ class SpecificWorker(GenericWorker):
         times = 1
         while times <= times_limit: 
             self.turn_left()
+            time.sleep(0.5)
             self.turn_right()
+            time.sleep(0.5)
             self.turn_right()
+            time.sleep(0.5)
             self.turn_left()
+            time.sleep(0.5)
             times+=1
     
     def moving_straight(self, duration: float, speed: int): 
@@ -140,11 +144,11 @@ class SpecificWorker(GenericWorker):
         time.sleep(duration)
         self.differentialrobot_proxy.stopBase()
 
-    def jolts(self, duration: float, speed: int): 
-        self.moving_straight(duration, speed)
-        time.sleep(0.5)
-        self.moving_straight(duration, speed)
-        time.sleep(0.5)
+    def jolts(self, duration: float, speed: int, times:int): 
+        i=0
+        while i<times: 
+            self.moving_straight(duration, speed)
+            time.sleep(0.5)
 
     def turn_back_slowly(self): 
         self.turn(5.10/3, math.pi/11)
@@ -173,34 +177,38 @@ class SpecificWorker(GenericWorker):
         self.set_all_LEDS_colors(red=50, green=0, blue=80, white=0) # light purple
         
         time.sleep(0.5)
-        self.jolts(0.1, -100)
+        times=2
+        self.jolts(0.5, -70, times)
 
     def expressSurprise(self): 
         self.emotionalmotor_proxy.expressSurprise() # light yellow
         self.set_all_LEDS_colors(red=255, green=255, blue=102, white=0)
 
-        self.differentialrobot_proxy.setSpeedBase(-100, 0) # go back quickly
+        self.moving_straight(0.5, -70) # go back quickly
         time.sleep(0.5)
-        
         self.turn_full()
     
     def expressAnger(self): 
         self.emotionalmotor_proxy.expressAnger()
         self.set_all_LEDS_colors(red=128, green=0, blue=0, white=0) # light red 
-        self.jolts(0.1, 100)
+        self.jolts(0.5, 70)
 
     def expressDisgust(self): 
         self.emotionalmotor_proxy.expressDisgust()
         self.set_all_LEDS_colors(red=50, green=30, blue=10, white=0) # dark green
         
-        self.moving_straight(0.5, -1000) # go back
+        self.moving_straight(2, -25) # go back
         time.sleep(0.5)
 
         # simulating saying "no"
         self.turn_left()
+        time.sleep(0.5)
         self.turn_right()
+        time.sleep(0.5)
         self.turn_right()
+        time.sleep(0.5)
         self.turn_left()
+        time.sleep(0.5)
 
         
 
