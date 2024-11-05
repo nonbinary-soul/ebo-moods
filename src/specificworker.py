@@ -186,6 +186,7 @@ class SpecificWorker(GenericWorker):
 
         self.moving_straight(0.5, -70) # go back quickly
         time.sleep(0.5)
+        
         self.turn_full()
     
     def expressAnger(self): 
