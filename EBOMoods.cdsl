@@ -2,12 +2,14 @@ import "EmotionalMotor.idsl";
 import "LEDArray.idsl";
 import "DifferentialRobot.idsl";
 import "EmergencyStop.idsl";
+import "EmergencyStop.idsl";
+import "Speech.idsl";
 
 Component EBOMoods
 {
     Communications
     {
-        requires EmotionalMotor, LEDArray, DifferentialRobot, EmergencyStop; 
+        requires EmotionalMotor, LEDArray, DifferentialRobot, EmergencyStop, Speech; 
     };
 
     language python;

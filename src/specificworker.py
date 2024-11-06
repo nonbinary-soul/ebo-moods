@@ -63,10 +63,10 @@ class SpecificWorker(GenericWorker):
     @QtCore.Slot()
     def compute(self):
         print('SpecificWorker.compute...')
-        # self.expressJoy()
+        self.expressJoy()
         # time.sleep(2)
-        self.expressSadness()
-        time.sleep(2)
+        # self.expressSadness()
+        # time.sleep(2)
         # self.expressFear()
         # time.sleep(2)
         # self.expressSurprise()
@@ -118,25 +118,21 @@ class SpecificWorker(GenericWorker):
         self.differentialrobot_proxy.stopBase()
 
     def turn_full(self):
-        self.turn(2.05, math.pi/9)
+        self.turn(2.00, math.pi/9)
 
     def turn_right(self):
-        self.turn(2.05/3, math.pi/9)
+        self.turn(2.05/4, math.pi/9)
 
     def turn_left(self):
-        self.turn(2.05/3, -(math.pi/9))
+        self.turn(2.05/4, -(math.pi/9))
 
     def moving_side_to_side(self, times_limit: int): 
-        times = 1
-        while times <= times_limit: 
+        times = 0
+        while times < times_limit: 
             self.turn_left()
-            time.sleep(0.5)
             self.turn_right()
-            time.sleep(0.5)
             self.turn_right()
-            time.sleep(0.5)
             self.turn_left()
-            time.sleep(0.5)
             times+=1
     
     def moving_straight(self, duration: float, speed: int): 
@@ -149,19 +145,23 @@ class SpecificWorker(GenericWorker):
         while i<times: 
             self.moving_straight(duration, speed)
             time.sleep(0.5)
+            i+=1
 
     def turn_back_slowly(self): 
-        self.turn(5.10/3, math.pi/11)
+        self.turn(4.10/3, math.pi/11)
 
     #########################################
 
     def expressJoy(self): 
         self.emotionalmotor_proxy.expressJoy()
+        self.speech_proxy.say("¡Hola!, soy EBO y estoy muy contento de estar aquí hablando contigo.", True) 
         self.set_all_LEDS_colors(red=0, green=170, blue=85, white=0) # light green
 
-        self.moving_straight(2, 35)
-        self.moving_straight(2, -35)
+        self.moving_straight(1, 30)
+        self.moving_straight(1, -30)
         self.moving_side_to_side(1)
+
+        time.sleep(1)
         
     def expressSadness(self): 
         self.emotionalmotor_proxy.expressSadness()
@@ -176,15 +176,14 @@ class SpecificWorker(GenericWorker):
         self.emotionalmotor_proxy.expressFear()
         self.set_all_LEDS_colors(red=50, green=0, blue=80, white=0) # light purple
         
-        time.sleep(0.5)
         times=2
-        self.jolts(0.5, -70, times)
+        self.jolts(0.2, -50, times)
 
     def expressSurprise(self): 
         self.emotionalmotor_proxy.expressSurprise() # light yellow
         self.set_all_LEDS_colors(red=255, green=255, blue=102, white=0)
 
-        self.moving_straight(0.5, -70) # go back quickly
+        self.moving_straight(0.5, -50) # go back quickly
         time.sleep(0.5)
         
         self.turn_full()
@@ -192,7 +191,8 @@ class SpecificWorker(GenericWorker):
     def expressAnger(self): 
         self.emotionalmotor_proxy.expressAnger()
         self.set_all_LEDS_colors(red=128, green=0, blue=0, white=0) # light red 
-        self.jolts(0.5, 70)
+        times=2
+        self.jolts(0.2, 50, times)
 
     def expressDisgust(self): 
         self.emotionalmotor_proxy.expressDisgust()
@@ -203,15 +203,13 @@ class SpecificWorker(GenericWorker):
 
         # simulating saying "no"
         self.turn_left()
-        time.sleep(0.5)
+        time.sleep(1)
         self.turn_right()
-        time.sleep(0.5)
+        time.sleep(1)
         self.turn_right()
-        time.sleep(0.5)
+        time.sleep(1)
         self.turn_left()
-        time.sleep(0.5)
-
-        
+        time.sleep(1)
 
     ######################
     # From the RoboCompDifferentialRobot you can call this methods:
@@ -254,4 +252,7 @@ class SpecificWorker(GenericWorker):
     # From the RoboCompLEDArray you can use this types:
     # RoboCompLEDArray.Pixel
 
-
+    ######################
+    # From the RoboCompSpeech you can call this methods:
+    # self.speech_proxy.isBusy(...)
+    # self.speech_proxy.say(...) 

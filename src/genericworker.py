@@ -45,6 +45,7 @@ class GenericWorker(QtCore.QObject):
         self.emergencystop_proxy = mprx["EmergencyStopProxy"]
         self.emotionalmotor_proxy = mprx["EmotionalMotorProxy"]
         self.ledarray_proxy = mprx["LEDArrayProxy"]
+        self.speech_proxy = mprx["SpeechProxy"]
 
         self.mutex = QtCore.QMutex()
         self.Period = 30

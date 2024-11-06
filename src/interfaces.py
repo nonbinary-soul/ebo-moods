@@ -15,6 +15,8 @@ Ice.loadSlice("-I ./src/ --all ./src/GenericBase.ice")
 import RoboCompGenericBase
 Ice.loadSlice("-I ./src/ --all ./src/LEDArray.ice")
 import RoboCompLEDArray
+Ice.loadSlice("-I ./src/ --all ./src/Speech.ice")
+import RoboCompSpeech
 
 
 
@@ -63,6 +65,8 @@ class Requires:
         self.EmotionalMotor = self.create_proxy("EmotionalMotorProxy", RoboCompEmotionalMotor.EmotionalMotorPrx)
 
         self.LEDArray = self.create_proxy("LEDArrayProxy", RoboCompLEDArray.LEDArrayPrx)
+
+        self.Speech = self.create_proxy("SpeechProxy", RoboCompSpeech.SpeechPrx)
 
     def get_proxies_map(self):
         return self.mprx

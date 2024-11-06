@@ -3,7 +3,7 @@ DifferentialRobotProxy = differentialrobot:tcp -h 192.168.3.46 -p 10004
 EmergencyStopProxy = emergencystop:tcp -h 192.168.3.46 -p 12143
 EmotionalMotorProxy = emotionalmotor:tcp -h 192.168.3.46 -p 10945
 LEDArrayProxy = ledarray:tcp -h 192.168.3.46 -p 10991
-
+SpeechProxy = speech:tcp -h 192.168.3.46 -p 11339
 
 
 
