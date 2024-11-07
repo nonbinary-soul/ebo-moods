@@ -64,17 +64,17 @@ class SpecificWorker(GenericWorker):
     def compute(self):
         print('SpecificWorker.compute...')
         self.expressJoy()
-        # time.sleep(2)
-        # self.expressSadness()
-        # time.sleep(2)
-        # self.expressFear()
-        # time.sleep(2)
-        # self.expressSurprise()
-        # time.sleep(2)
-        # self.expressAnger()
-        # time.sleep(2)
-        # self.expressDisgust()
-        # time.sleep(2)
+        time.sleep(3)
+        self.expressSadness()
+        time.sleep(3)
+        self.expressFear()
+        time.sleep(3)
+        self.expressSurprise()
+        time.sleep(3)
+        self.expressAnger()
+        time.sleep(3)
+        self.expressDisgust()
+        time.sleep(3)
         return True
 
     def startup_check(self):
@@ -154,7 +154,7 @@ class SpecificWorker(GenericWorker):
 
     def expressJoy(self): 
         self.emotionalmotor_proxy.expressJoy()
-        self.speech_proxy.say("¡Hola!, soy EBO y estoy muy contento de estar aquí hablando contigo.", True) 
+        # self.speech_proxy.say("¡Hola!, soy EBO y estoy muy contento de estar aquí hablando contigo.", True) 
         self.set_all_LEDS_colors(red=0, green=170, blue=85, white=0) # light green
 
         self.moving_straight(1, 30)
